@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NCPI Dashboard</title>
+    <link rel="stylesheet" href="Styles.css">
+</head>
+<body>
+    <div class="container">
+        <aside class="sidebar">
+            <div class="logo">
+                <h1>NCPI</h1>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="#" class="active">Dashboard</a></li>
+                    <li><a href="#">Iniciativas</a></li>
+                    <li><a href="#">Metas</a></li>
+                    <li><a href="#">Resultados</a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <header>
+                <div class="search-bar">
+                    <input type="search" placeholder="Pesquisar iniciativas...">
+                </div>
+                <div class="user-profile">
+                    <span>Admin</span>
+                </div>
+            </header>
+
+            <div class="initiatives-grid" id="initiativesContainer">
+                <!-- JavaScript will populate this area -->
+            </div>
+        </main>
+    </div>
+
+    <script>
+        fetch('Database.json')
+            .then(response => response.json())
+            .then(data => {
+                const container = document.getElementById('initiativesContainer');
+                
+                data.forEach(initiative => {
+                    const card = document.createElement('div');
+                    card.className = 'initiative-card';
+                    
+                    card.innerHTML = `
+                        <h3>${initiative.Iniciativas}</h3>
+                        <p class="description">${initiative.Descrição || 'Sem descrição'}</p>
+                        <div class="meta-info">
+                            <div class="results">
+                                <h4>Resultados:</h4>
+                                <ul>
+                                    ${initiative.Resultados.map(result => `<li>${result}</li>`).join('')}
+                                </ul>
+                            </div>
+                            <div class="status">
+                                <span class="tag">${initiative.Porta}</span>
+                            </div>
+                        </div>
+                    `;
+                    
+                    container.appendChild(card);
+                });
+            })
+            .catch(error => console.error('Erro ao carregar dados:', error));
+    </script>
+</body>
+</html>
